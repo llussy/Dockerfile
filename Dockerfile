@@ -1,10 +1,22 @@
-FROM alpine:3.7
-RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.7/main/" > /etc/apk/repositories
+FROM maven:3.6-jdk-8-alpine AS build
+ADD . /tmp/
 
-RUN apk update \
-        && apk upgrade \
-        && apk add --no-cache bash \
-        bash-doc \
-        bash-completion \
-        && rm -rf /var/cache/apk/* \
-        && /bin/bash
+RUN mkdir -p /data/project \
+    && cd /tmp/ \
+    && mvn clean package -P release
+
+FROM openjdk:8u131-jre-alpine
+
+WORKDIR /data/project
+
+COPY --from=build /tmp/target/*.jar /data/project/project.jar
+
+EXPOSE 8080
+
+CMD ["java", \
+    "-Xmx1G", \
+    "-Xms1G", \
+    "-XX:+UseG1GC", \
+    "-Duser.timezone=Asia/Shanghai", \
+    "-jar", \
+    "project.jar"]
