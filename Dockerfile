@@ -1,22 +1,20 @@
-FROM maven:3.6-jdk-8-alpine AS build
-ADD . /tmp/
+FROM golang:1.14 as build-env
 
-RUN mkdir -p /data/project \
-    && cd /tmp/ \
-    && mvn clean package -P release
+COPY . /root
 
-FROM openjdk:8u131-jre-alpine
+WORKDIR /root
 
-WORKDIR /data/project
+RUN \
+  export GO111MODULE=on &&\
+  export GOPROXY=https://goproxy.io &&\
+  go build -o project &&\
+  mv project / &&\
+  rm -rf /root/*
 
-COPY --from=build /tmp/target/*.jar /data/project/project.jar
+FROM ubuntu:16.04
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY --from=build-env /project /project
+EXPOSE 9090
+CMD ["/project"]
 
-EXPOSE 8080
-
-CMD ["java", \
-    "-Xmx1G", \
-    "-Xms1G", \
-    "-XX:+UseG1GC", \
-    "-Duser.timezone=Asia/Shanghai", \
-    "-jar", \
-    "project.jar"]
+# docker run -it --rm  -p 9090:9090 project:v1
