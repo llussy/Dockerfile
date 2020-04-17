@@ -78,6 +78,7 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN echo "[mysqld]" >> /etc/mysql/my.cnf \ 
     && echo "character-set-server=utf8" >> /etc/mysql/my.cnf \
     && echo "default-time_zone = '+8:00'" >> /etc/mysql/my.cnf \
+    && echo "ft_min_word_len = 1" >> /etc/mysql/my.cnf \
     && echo "[client]" >> /etc/mysql/my.cnf \ 
     && echo "default-character-set=utf8" >> /etc/mysql/my.cnf
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
