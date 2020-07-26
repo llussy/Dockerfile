@@ -54,6 +54,8 @@ RUN set -ex; \
         libmemcached-dev zlib1g-dev \
         openssl libssl-dev \
         git \
+        cron \
+        procps \
         supervisor \
         '; \
         apt-get update; \
@@ -96,8 +98,9 @@ RUN set -ex; \
     sed -i "s|;opcache.interned_strings_buffer=8|opcache.interned_strings_buffer=16|g" $PHP_INI_CONF; \
     sed -i "s|;opcache.validate_timestamps=1|opcache.validate_timestamps=0|g" $PHP_INI_CONF;
 
-RUN echo "*/1 * * * *  /usr/local/bin/php /usr/local/openresty/nginx/html/hello.php" >> /etc/crontabs/root \
-    && /usr/bin/crontab -u root /etc/crontabs/root
+RUN echo "*/1 * * * *  /usr/local/bin/php /usr/local/openresty/nginx/html/hello.php" >> /etc/crontabroot \
+    && echo "*/1 * * * * echo \"hello world\" >> /tmp/crontest" >> /etc/crontabroot \
+    && /usr/bin/crontab -u root /etc/crontabroot
 
 EXPOSE 80
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
