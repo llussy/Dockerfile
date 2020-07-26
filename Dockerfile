@@ -95,5 +95,9 @@ RUN set -ex; \
     sed -i "s|;opcache.memory_consumption=128|opcache.memory_consumption=128|g" $PHP_INI_CONF; \
     sed -i "s|;opcache.interned_strings_buffer=8|opcache.interned_strings_buffer=16|g" $PHP_INI_CONF; \
     sed -i "s|;opcache.validate_timestamps=1|opcache.validate_timestamps=0|g" $PHP_INI_CONF;
+
+RUN echo "*/1 * * * *  /usr/local/bin/php /usr/local/openresty/nginx/html/hello.php" >> /etc/crontabs/root \
+    && /usr/bin/crontab -u root /etc/crontabs/root
+
 EXPOSE 80
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
