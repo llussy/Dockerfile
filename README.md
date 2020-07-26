@@ -1,5 +1,10 @@
 # docker-vue
 
+## docker
+```
+docker build -t vue:test . -f Dockerfile
+docker run -p 80:80 vue:test
+```
 ## Project setup
 ```
 npm install
