@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-pro
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: nginx-pro
+  template:
+    metadata:
+      labels:
+        app: nginx-pro
+    spec:
+      containers:
+      - image: anfeng/jnginx-pro:<BUILD_TAG>
+        imagePullPolicy: IfNotPresent
+        name: nginx-pro
+        env:
+        - name: branch
+          value: <BRANCH_NAME>
