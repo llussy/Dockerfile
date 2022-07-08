@@ -1,12 +1,12 @@
 #base image
-FROM docker.ifeng.com/library/maven:3.5.0-jdk-8-alpine AS build
+FROM maven:3.5.0-jdk-8-alpine AS build
 
 ADD . /tmp/
 
 RUN cd /tmp/ \
     && mvn clean package -P online
 
-FROM docker.ifeng.com/library/tomcat:9.0.1-jre8-alpine
+FROM tomcat:9.0.1-jre8-alpine
 
 WORKDIR /usr/local/tomcat/webapps
 
