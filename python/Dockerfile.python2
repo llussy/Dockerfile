@@ -1,0 +1,8 @@
+FROM python:2.7.18
+ADD .  /usr/local/image_finger/
+RUN ln -sf /dev/stdout  /usr/local/image_finger/log/main.log
+RUN pip install -i https://mirrors.cloud.tencent.com/pypi/simple --upgrade pip
+RUN python -m pip install --upgrade setuptools
+RUN cd /usr/local/image_finger  && pip install -r requirements.txt -i https://mirrors.cloud.tencent.com/pypi/simple
+EXPOSE 8080
+CMD ["python2","/usr/local/image_finger/server.py"]
