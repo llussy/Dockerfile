@@ -19,3 +19,7 @@
 [vue](https://github.com/llussy/Dockerfile/tree/vue)
 
 [node-simple](https://github.com/llussy/Dockerfile/tree/node-simple)
+
+[alpine-nginx-nodejs](https://github.com/hoosin/alpine-nginx-nodejs)
+
+
